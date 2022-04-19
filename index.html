@@ -1,0 +1,117 @@
+<h1>Snake and Ladder Board Game</h1>
+<input id='gird' type="number" placeholder="enter the gird size"></input><br><br><br>
+<input id='Player' type="number" placeholder="enter the no of player"></input><br><br><br>
+<button id="start">Start </button>
+
+<div><br><br><br>
+    <div id='container'></div>
+</div>
+
+<body>
+    <script>
+        document.getElementById('start').onclick = function () {
+            const gird = parseInt(document.getElementById('gird').value);
+            const players = parseInt(document.getElementById('Player').value);
+            let a = [];
+            for (let i = 0; i < players; i++) {
+                a[i] = {
+                    LastDiceRoll: 0,
+                    DiceRollHistory: [],
+                    PostionHistory: [],
+                    Status: false,
+                    pos: 0,
+                    x: 0,
+                    y: 0,
+                    coordinates: [],
+                };
+            }
+
+            let girdsize = gird * gird;
+            let isOver = false;
+            while (!isOver) {
+                for (let i = 0; i < players; i++) {
+                    let dice = Math.floor(Math.random() * 6) + 1;
+                    let cx, cy;
+                    let arr = [];
+                    if (a[i].pos === girdsize) {
+                        isOver = true;
+                        a[i].Status = true;
+                        break;
+                    } else {
+                        a[i].LastDiceRoll = dice;
+                        a[i].DiceRollHistory.push(dice);
+                        let futurePos = a[i].pos + dice;
+                        if (futurePos <= girdsize) {
+                            a[i].pos = futurePos;
+                            a[i].PostionHistory.push(a[i].pos);
+                            let gx = parseInt(futurePos / gird);
+                            let gy = parseInt(futurePos % gird);
+                            if (gy === 0) {
+                                cx = gx - 1;
+                                cy = gird - 1;
+                            } else {
+                                cx = gx;
+                                cy = gy - 1;
+                            }
+                            if (i % 2 === 0) {
+
+                            }
+                            a[i].x = cx;
+                            a[i].y = cy;
+                            cx = '(' + cx;
+                            cy = cy + ')';
+                            arr.push(cx);
+                            arr.push(cy);
+                            a[i].coordinates.push(arr);
+                        }
+                    }
+                }
+            }
+
+            createTable(players, 6);
+
+            function createTable(rows, cols) {
+                var whoiswinner;
+                var output = '<table border="2" cellspacing="1" cellpadding="8" class="table"><tr><th>Payer Number</th><th>Last Dice Roll</th><th>Dice Roll History</th><th>Position Hitory</th><th>Winner Status</th><th>Co-ordinates</th></tr>';
+                for (var i = 1; i <= rows; i++) {
+                    output = output + '<tr>';
+                    for (var j = 1; j <= cols; j++) {
+                        output = output + '<td id=' + i + j + '>' + '' + '</td>';
+                    }
+                    output = output + '</tr>';
+                }
+                output = output + '</table';
+                document.getElementById('container').innerHTML = output;
+                let tablevalues = [
+                    'LastDiceRoll',
+                    'DiceRollHistory',
+                    'PostionHistory',
+                    'Status',
+                    'coordinates',
+                ];
+                for (var k = 1; k <= players; k++) {
+                    for (var ii = 1; ii <= rows; ii++) {
+                        for (var jj = 1; jj <= cols; jj++) {
+                            if (jj === 1) {
+                                document.getElementById('' + ii + jj).innerHTML = ii;
+                            } else {
+                                let temp = tablevalues[jj - 2];
+                                let value = a[ii - 1][temp];
+                                if (temp === 'Status') {
+                                    if (value) {
+                                        value = 'Winner';
+                                        whoiswinner = k - 2;
+                                    } else {
+                                        value = '-';
+                                    }
+                                }
+                                document.getElementById('' + ii + jj).innerHTML = value;
+                            }
+                        }
+                    }
+                }
+            }
+        };
+
+    </script>
+</body>
