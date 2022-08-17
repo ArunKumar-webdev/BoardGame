@@ -1,3 +1,3 @@
 # BoardGame
 
-## Type of snake and ladder game without Visual or representation
+## Type of snake and ladder game without Visual representation
